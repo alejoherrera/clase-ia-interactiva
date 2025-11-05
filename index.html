@@ -959,6 +959,19 @@
             currentSection = index;
             document.getElementById('progress').textContent = `Sección ${index + 1} de ${totalSections}`;
 
+            // Redibujar canvas según la sección
+            setTimeout(() => {
+                if (index === 0) {
+                    drawIntroNetwork();
+                } else if (index === 1) {
+                    resetGradient();
+                } else if (index === 2) {
+                    createAttentionVisualization();
+                } else if (index === 3) {
+                    drawContextComparison();
+                }
+            }, 100);
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -966,9 +979,13 @@
         function drawIntroNetwork() {
             const canvas = document.getElementById('introCanvas');
             if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            canvas.width = canvas.offsetWidth;
+
+            // Asegurar que el canvas tenga un tamaño válido
+            const width = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+            canvas.width = width;
             canvas.height = 400;
+
+            const ctx = canvas.getContext('2d');
 
             const layers = [4, 6, 6, 3];
             const layerX = [];
@@ -1193,10 +1210,13 @@
         function startGradientDescent() {
             const canvas = document.getElementById('gradientCanvas');
             if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            canvas.width = canvas.offsetWidth;
+
+            // Asegurar que el canvas tenga un tamaño válido
+            const width = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+            canvas.width = width;
             canvas.height = 400;
 
+            const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Dibujar función de pérdida (parábola)
@@ -1243,9 +1263,38 @@
         function resetGradient() {
             const canvas = document.getElementById('gradientCanvas');
             if (!canvas) return;
+
+            // Asegurar que el canvas tenga un tamaño válido
+            const width = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+            canvas.width = width;
+            canvas.height = 400;
+
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            document.getElementById('gradientInfo').textContent = 'Haz clic en "Iniciar Descenso" para ver cómo el algoritmo encuentra el mínimo.';
+
+            // Dibujar función de pérdida inicial
+            ctx.beginPath();
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+
+            for (let x = 0; x < canvas.width; x++) {
+                const normalizedX = (x - canvas.width / 2) / 100;
+                const y = canvas.height - (normalizedX * normalizedX * 50 + 50);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Etiquetas
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('Error/Pérdida', 20, 40);
+            ctx.fillText('Parámetros', canvas.width - 100, canvas.height - 20);
+
+            const infoElement = document.getElementById('gradientInfo');
+            if (infoElement) {
+                infoElement.textContent = 'Haz clic en "Iniciar Descenso" para ver cómo el algoritmo encuentra el mínimo.';
+            }
         }
 
         // Visualización de atención
@@ -1302,9 +1351,13 @@
         function drawContextComparison() {
             const canvas = document.getElementById('contextCanvas');
             if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            canvas.width = canvas.offsetWidth;
+
+            // Asegurar que el canvas tenga un tamaño válido
+            const width = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+            canvas.width = width;
             canvas.height = 400;
+
+            const ctx = canvas.getContext('2d');
 
             const models = [
                 { name: 'GPT-3', context: 4, color: '#667eea' },
