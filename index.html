@@ -1024,12 +1024,168 @@
             ctx.fillText('Salida', layerX[3] - 20, 30);
         }
 
+        // Variables para la animación de red neuronal
+        let animationInterval = null;
+        let networkData = null;
+
         // Animación de red neuronal
         function animateNetwork() {
-            alert('Imagina que los datos fluyen de izquierda a derecha, activando cada neurona secuencialmente.');
+            if (animationInterval) {
+                clearInterval(animationInterval);
+            }
+
+            const canvas = document.getElementById('introCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const layers = [4, 6, 6, 3];
+            const spacing = canvas.width / (layers.length + 1);
+
+            // Guardar posiciones de las neuronas
+            const neurons = [];
+            for (let l = 0; l < layers.length; l++) {
+                const layerNeurons = [];
+                const x = spacing * (l + 1);
+                for (let i = 0; i < layers[l]; i++) {
+                    const y = (canvas.height / (layers[l] + 1)) * (i + 1);
+                    layerNeurons.push({ x, y, active: false, activation: 0 });
+                }
+                neurons.push(layerNeurons);
+            }
+
+            // Activar capa de entrada
+            neurons[0].forEach(n => {
+                n.active = true;
+                n.activation = 1;
+            });
+
+            let currentLayer = 0;
+            let step = 0;
+
+            animationInterval = setInterval(() => {
+                // Limpiar canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Dibujar todas las conexiones con opacidad variable
+                ctx.lineWidth = 2;
+                for (let l = 0; l < layers.length - 1; l++) {
+                    for (let i = 0; i < layers[l]; i++) {
+                        for (let j = 0; j < layers[l + 1]; j++) {
+                            const source = neurons[l][i];
+                            const target = neurons[l + 1][j];
+
+                            // Calcular opacidad basada en activación
+                            let opacity = 0.1;
+                            if (l <= currentLayer && source.activation > 0) {
+                                opacity = 0.3 + (source.activation * 0.5);
+                            }
+
+                            ctx.strokeStyle = `rgba(102, 126, 234, ${opacity})`;
+                            ctx.beginPath();
+                            ctx.moveTo(source.x, source.y);
+                            ctx.lineTo(target.x, target.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Dibujar todas las neuronas
+                for (let l = 0; l < layers.length; l++) {
+                    for (let i = 0; i < layers[l].length; i++) {
+                        const neuron = neurons[l][i];
+
+                        // Color basado en activación
+                        let fillColor = '#e0e0e0';
+                        let strokeColor = '#999';
+                        let radius = 15;
+
+                        if (neuron.activation > 0) {
+                            const intensity = neuron.activation;
+                            const r = Math.floor(102 + (245 - 102) * intensity);
+                            const g = Math.floor(126 + (87 - 126) * intensity);
+                            const b = Math.floor(234 + (108 - 234) * intensity);
+                            fillColor = `rgb(${r}, ${g}, ${b})`;
+                            strokeColor = '#f5576c';
+                            radius = 15 + (5 * intensity);
+                        }
+
+                        ctx.beginPath();
+                        ctx.arc(neuron.x, neuron.y, radius, 0, 2 * Math.PI);
+                        ctx.fillStyle = fillColor;
+                        ctx.fill();
+                        ctx.strokeStyle = strokeColor;
+                        ctx.lineWidth = 3;
+                        ctx.stroke();
+
+                        // Efecto de pulso en neuronas activas
+                        if (neuron.activation > 0.8) {
+                            ctx.beginPath();
+                            ctx.arc(neuron.x, neuron.y, radius + 5, 0, 2 * Math.PI);
+                            ctx.strokeStyle = `rgba(245, 87, 108, ${0.3 * neuron.activation})`;
+                            ctx.lineWidth = 2;
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                // Dibujar etiquetas
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 14px Arial';
+                const labels = ['Entrada', 'Oculta 1', 'Oculta 2', 'Salida'];
+                for (let l = 0; l < layers.length; l++) {
+                    const x = spacing * (l + 1);
+                    ctx.fillText(labels[l], x - 25, 30);
+                }
+
+                // Mostrar mensaje de progreso
+                ctx.fillStyle = '#667eea';
+                ctx.font = 'bold 16px Arial';
+                if (currentLayer < layers.length) {
+                    ctx.fillText(`Propagando: Capa ${currentLayer + 1} → Capa ${currentLayer + 2}`, 20, canvas.height - 20);
+                } else {
+                    ctx.fillText('✓ Propagación completada!', 20, canvas.height - 20);
+                }
+
+                // Propagar activación a la siguiente capa
+                if (step % 2 === 0 && currentLayer < layers.length - 1) {
+                    // Activar siguiente capa con efecto gradual
+                    neurons[currentLayer + 1].forEach(neuron => {
+                        neuron.activation = Math.min(1, neuron.activation + 0.5);
+                        if (neuron.activation >= 1) {
+                            neuron.active = true;
+                        }
+                    });
+
+                    // Decrementar activación de capa actual
+                    if (currentLayer > 0) {
+                        neurons[currentLayer - 1].forEach(neuron => {
+                            neuron.activation = Math.max(0, neuron.activation - 0.3);
+                        });
+                    }
+
+                    currentLayer++;
+                }
+
+                step++;
+
+                // Terminar animación
+                if (currentLayer >= layers.length && step > layers.length * 2 + 5) {
+                    clearInterval(animationInterval);
+                    animationInterval = null;
+
+                    // Mantener última imagen por un momento antes de permitir reiniciar
+                    setTimeout(() => {
+                        // No hacer nada, dejar el último frame visible
+                    }, 1000);
+                }
+            }, 300);
         }
 
         function resetNetwork() {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
             drawIntroNetwork();
         }
 
