@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Paradigma Blockchain - Clase Interactiva</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        nav {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .section {
+            background: white;
+            padding: 40px;
+            margin: 30px 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #f5576c;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f5576c;
+        }
+
+        h3 {
+            color: #f093fb;
+            font-size: 1.8em;
+            margin: 30px 0 15px;
+        }
+
+        p, li {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #f5576c;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .blockchain-canvas {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #f5576c;
+            border-radius: 15px;
+            margin: 20px 0;
+            background: #f8f9fa;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            padding: 15px 30px;
+            background: #f5576c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .demo-btn:hover {
+            background: #f093fb;
+            transform: scale(1.05);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+            margin: 40px 0;
+        }
+
+        .timeline-item {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            position: relative;
+            padding-left: 80px;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .timeline-year {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .quiz-container {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .quiz-question {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            background: white;
+            border: 2px solid #f5576c;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            background: #f5576c;
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .quiz-option.correct {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .quiz-option.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comparison-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .progress-indicator {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .key-concept {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #f5576c;
+        }
+
+        .block-viz {
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            margin: 10px;
+            padding: 15px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .block-viz:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .block-chain-arrow {
+            display: inline-block;
+            font-size: 2em;
+            color: #f5576c;
+            margin: 0 10px;
+        }
+
+        .consensus-diagram {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .consensus-card {
+            flex: 1;
+            min-width: 280px;
+            margin: 10px;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .consensus-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .consensus-card.pow {
+            border-left: 5px solid #f5576c;
+        }
+
+        .consensus-card.pos {
+            border-left: 5px solid #4caf50;
+        }
+
+        .author-info {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            padding: 20px;
+            font-size: 1.1em;
+        }
+
+        .author-info a {
+            color: #ffecd2;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .author-info a:hover {
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .author-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .author-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            margin-top: 50px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.8em; }
+            .section { padding: 20px; }
+            .nav-buttons { flex-direction: column; }
+            .block-viz { width: 100px; height: 100px; }
+        }
+
+        .home-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .home-link:hover {
+            background: rgba(255,255,255,0.4);
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="home-link">← Volver al inicio</a>
+            <h1 class="pulse">El Paradigma Blockchain</h1>
+            <p class="subtitle">Un análisis estratégico de fundamentos, evolución e impacto en la economía digital</p>
+            <div class="author-info">
+                <div class="author-badge">
+                    Creado por <strong>Alejandro Herrera López</strong>
+                </div>
+            </div>
+        </header>
+
+        <nav>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection(0)">Introducción</button>
+                <button class="nav-btn" onclick="showSection(1)">Fundamentos</button>
+                <button class="nav-btn" onclick="showSection(2)">Consenso</button>
+                <button class="nav-btn" onclick="showSection(3)">Historia</button>
+                <button class="nav-btn" onclick="showSection(4)">Aplicaciones</button>
+                <button class="nav-btn" onclick="showSection(5)">Futuro</button>
+                <button class="nav-btn" onclick="showSection(6)">Desafíos</button>
+            </div>
+            <div class="progress-indicator" id="progress">Sección 1 de 7</div>
+        </nav>
+
+        <!-- SECCIÓN 0: INTRODUCCIÓN -->
+        <section class="section active" id="section-0">
+            <h2>Resumen Ejecutivo</h2>
+
+            <div class="highlight-box">
+                <h3>La Verdadera Innovación de Blockchain</h3>
+                <p>Blockchain no es solo una base de datos novedosa. Su verdadera innovación es el desarrollo de un <strong>mecanismo de coordinación descentralizado</strong> que automatiza la confianza, la verificación y la ejecución, reduciendo la dependencia de intermediarios centralizados.</p>
+            </div>
+
+            <h3>Visualización: La Cadena de Bloques</h3>
+            <div class="interactive-demo">
+                <p>Observa cómo se conectan los bloques mediante hashes criptográficos:</p>
+                <div id="blockchainViz" style="text-align: center; margin: 30px 0;">
+                    <div class="block-viz" onclick="showBlockDetail(0)">
+                        <strong>Bloque 0</strong><br>
+                        <small>Génesis</small><br>
+                        <div style="font-size: 0.7em; margin-top: 10px;">Hash: 0x00...</div>
+                    </div>
+                    <span class="block-chain-arrow">→</span>
+                    <div class="block-viz" onclick="showBlockDetail(1)">
+                        <strong>Bloque 1</strong><br>
+                        <small>3 Trans.</small><br>
+                        <div style="font-size: 0.7em; margin-top: 10px;">Hash: 0xA3...</div>
+                    </div>
+                    <span class="block-chain-arrow">→</span>
+                    <div class="block-viz" onclick="showBlockDetail(2)">
+                        <strong>Bloque 2</strong><br>
+                        <small>5 Trans.</small><br>
+                        <div style="font-size: 0.7em; margin-top: 10px;">Hash: 0xF7...</div>
+                    </div>
+                    <span class="block-chain-arrow">→</span>
+                    <div class="block-viz" onclick="showBlockDetail(3)">
+                        <strong>Bloque 3</strong><br>
+                        <small>2 Trans.</small><br>
+                        <div style="font-size: 0.7em; margin-top: 10px;">Hash: 0x9B...</div>
+                    </div>
+                </div>
+                <div id="blockDetail" class="key-concept" style="display:none;"></div>
+            </div>
+
+            <div class="key-concept">
+                <h3>Los 3 Fundamentos de Blockchain</h3>
+                <ol>
+                    <li><strong>Criptografía:</strong> Para identidad y seguridad</li>
+                    <li><strong>Estructuras de datos inmutables:</strong> Encadenamiento de hashes</li>
+                    <li><strong>Consenso distribuido:</strong> Acuerdo sin autoridad central</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 1: FUNDAMENTOS -->
+        <section class="section" id="section-1">
+            <h2>Parte I: Fundamentos Arquitectónicos</h2>
+
+            <h3>La Tríada de la Confianza</h3>
+            <p>Blockchain fabrica la confianza digital mediante tres pilares tecnológicos:</p>
+
+            <div class="highlight-box">
+                <h3>1. El Bloque y la Cadena (Almacenamiento Inmutable)</h3>
+                <p>Las transacciones se agrupan en <strong>bloques</strong>. Cada bloque contiene la "huella digital" (hash) del bloque anterior.</p>
+                <p><strong>Función Hash:</strong> Algoritmo matemático que convierte cualquier dato en una cadena de caracteres de longitud fija. Es unidireccional: fácil de calcular, imposible de revertir.</p>
+            </div>
+
+            <div class="interactive-demo">
+                <h3>Demo: Inmutabilidad de la Cadena</h3>
+                <canvas id="immutabilityCanvas" class="blockchain-canvas"></canvas>
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="demonstrateImmutability()">Intentar Alterar Bloque</button>
+                    <button class="demo-btn" onclick="resetImmutabilityDemo()">Reiniciar</button>
+                </div>
+                <p id="immutabilityInfo">Haz clic en "Intentar Alterar Bloque" para ver qué sucede cuando se modifica un bloque antiguo.</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>2. Criptografía Asimétrica (Verificación de Propiedad)</h3>
+                <p>Cada participante tiene un par de claves matemáticamente vinculadas:</p>
+                <ul>
+                    <li><strong>Clave Privada:</strong> Secreta, como una contraseña. NUNCA se comparte.</li>
+                    <li><strong>Clave Pública:</strong> Se puede compartir. Actúa como tu "dirección" o número de cuenta.</li>
+                </ul>
+                <p><strong>Firma Digital:</strong> Usas tu clave privada para "firmar" transacciones. Otros verifican con tu clave pública sin conocer tu clave privada.</p>
+            </div>
+
+            <div class="key-concept">
+                <h3>Concepto Clave: Propiedad Digital Soberana</h3>
+                <p>"Ser propietario" de Bitcoin no significa tener un archivo. Significa ser el único poseedor de la clave privada capaz de autorizar su movimiento.</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>3. Redes Peer-to-Peer (Descentralización)</h3>
+                <p>La blockchain no reside en un servidor central. Es una <strong>base de datos distribuida</strong> mantenida por miles de nodos independientes.</p>
+                <p><strong>Beneficios:</strong></p>
+                <ul>
+                    <li>Resiliencia: Sin puntos únicos de fallo</li>
+                    <li>Resistencia a la censura: Ninguna entidad controla la red</li>
+                    <li>Transparencia: Todos tienen la misma "verdad"</li>
+                </ul>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Quiz: ¿Qué sucede si intentas alterar un bloque antiguo en la cadena?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) El bloque se actualiza sin problemas</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">B) El hash cambia y rompe la cadena</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">C) Solo el administrador lo puede detectar</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) Nadie lo nota</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: CONSENSO -->
+        <section class="section" id="section-2">
+            <h2>Parte II: Mecanismos de Consenso</h2>
+
+            <h3>El Problema del Consenso</h3>
+            <p>En una red descentralizada donde los participantes no confían entre sí, ¿cómo se ponen todos de acuerdo sobre qué transacciones son válidas?</p>
+
+            <div class="consensus-diagram">
+                <div class="consensus-card pow">
+                    <h3>⚡ Prueba de Trabajo (PoW)</h3>
+                    <p><strong>Usado por:</strong> Bitcoin</p>
+                    <p><strong>Concepto:</strong> Mineros compiten resolviendo puzzles criptográficos complejos</p>
+                    <p><strong>Seguridad:</strong> El coste energético hace prohibitivo atacar la red</p>
+                    <p><strong>Ventaja:</strong> Altamente seguro y probado</p>
+                    <p><strong>Desventaja:</strong> Alto consumo de energía</p>
+                </div>
+
+                <div class="consensus-card pos">
+                    <h3>💰 Prueba de Participación (PoS)</h3>
+                    <p><strong>Usado por:</strong> Ethereum, Cardano</p>
+                    <p><strong>Concepto:</strong> Validadores bloquean capital como garantía</p>
+                    <p><strong>Seguridad:</strong> Si actúan mal, pierden su garantía (slashing)</p>
+                    <p><strong>Ventaja:</strong> Eficiente energéticamente (99% menos)</p>
+                    <p><strong>Desventaja:</strong> Menos probado históricamente</p>
+                </div>
+            </div>
+
+            <h3>Comparativa Técnica</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Atributo</th>
+                        <th>Prueba de Trabajo (PoW)</th>
+                        <th>Prueba de Participación (PoS)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Base de Seguridad</strong></td>
+                        <td>Poder computacional</td>
+                        <td>Capital económico</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Participantes</strong></td>
+                        <td>Mineros</td>
+                        <td>Validadores</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Consumo Energético</strong></td>
+                        <td>Muy alto</td>
+                        <td>Muy bajo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vector de Ataque</strong></td>
+                        <td>Controlar >50% hash rate</td>
+                        <td>Controlar >50% del stake</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Penalización</strong></td>
+                        <td>Coste de energía y hardware</td>
+                        <td>Slashing (pérdida de garantía)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="interactive-demo">
+                <h3>Simulación: Minería PoW vs Validación PoS</h3>
+                <canvas id="consensusCanvas" class="blockchain-canvas"></canvas>
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="simulatePoW()">Simular PoW</button>
+                    <button class="demo-btn" onclick="simulatePoS()">Simular PoS</button>
+                    <button class="demo-btn" onclick="resetConsensusDemo()">Reiniciar</button>
+                </div>
+                <p id="consensusInfo">Selecciona un mecanismo de consenso para ver cómo funciona.</p>
+            </div>
+
+            <div class="key-concept">
+                <h3>Filosofías Opuestas</h3>
+                <p><strong>PoW:</strong> Asegura con coste externo (energía del mundo real)</p>
+                <p><strong>PoS:</strong> Asegura con coste interno (capital en riesgo)</p>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Quiz: ¿Por qué Ethereum cambió de PoW a PoS?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) Para ser más rápido</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">B) Para reducir el consumo de energía 99%</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">C) Para aumentar las comisiones</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) Por regulación gubernamental</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: HISTORIA -->
+        <section class="section" id="section-3">
+            <h2>Parte III: Historia y Evolución</h2>
+
+            <h3>De la Teoría a la Economía Global</h3>
+            <p>La evolución de blockchain se divide en fases claras:</p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">1991</div>
+                    <strong>Precursor:</strong> Haber & Stornetta - Cadena criptográficamente segura para sellar tiempo de documentos
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">1997</div>
+                    <strong>Hashcash:</strong> Adam Back crea PoW para combatir spam
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2008</div>
+                    <strong>Bitcoin:</strong> Satoshi Nakamoto publica el white paper durante la crisis financiera
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2009</div>
+                    <strong>Blockchain 1.0:</strong> Lanzamiento de la red Bitcoin - primer blockchain público
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2015</div>
+                    <strong>Blockchain 2.0:</strong> Ethereum introduce Smart Contracts - programabilidad
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2020</div>
+                    <strong>DeFi Boom:</strong> Explosión de finanzas descentralizadas
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2022</div>
+                    <strong>The Merge:</strong> Ethereum pasa de PoW a PoS
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <strong>Blockchain 3.0:</strong> Integración, Modularidad y Tokenización RWA
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Blockchain 1.0: Bitcoin (Libro Mayor)</h3>
+                <p><strong>Innovación:</strong> Resolvió el problema del doble gasto sin autoridad central</p>
+                <p><strong>Propósito:</strong> Efectivo digital peer-to-peer</p>
+                <p><strong>Limitación:</strong> Solo rastreaba un activo (BTC)</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Blockchain 2.0: Ethereum (Computadora Mundial)</h3>
+                <p><strong>Innovación:</strong> Smart Contracts - código que se ejecuta en la blockchain</p>
+                <p><strong>Salto Cuántico:</strong> De base de datos pasiva a plataforma de computación activa</p>
+                <p><strong>Impacto:</strong> Habilitó DeFi, NFTs, DAOs, Web3</p>
+            </div>
+
+            <div class="key-concept">
+                <h3>Smart Contracts: El Salto Cuántico</h3>
+                <p>Un smart contract es un programa que:</p>
+                <ul>
+                    <li>Se almacena en la blockchain</li>
+                    <li>Se ejecuta automáticamente cuando se cumplen condiciones</li>
+                    <li>Es imparable: no puede ser censurado ni detenido</li>
+                    <li>Es determinístico: siempre produce el mismo resultado</li>
+                </ul>
+                <p><strong>Ejemplo:</strong> "SI el pago se recibe antes del viernes, ENTONCES transferir la propiedad del activo"</p>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Quiz: ¿Cuál fue la principal innovación de Ethereum sobre Bitcoin?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) Transacciones más rápidas</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">B) Smart Contracts - programabilidad</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">C) Mayor seguridad</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) Menor consumo de energía</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: APLICACIONES -->
+        <section class="section" id="section-4">
+            <h2>Parte IV: Aplicaciones y Casos de Uso</h2>
+
+            <h3>Tipología de Blockchains</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Gobernanza</th>
+                        <th>Acceso</th>
+                        <th>Casos de Uso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Pública</strong></td>
+                        <td>Descentralizada</td>
+                        <td>Cualquiera puede participar</td>
+                        <td>Bitcoin, Ethereum, DeFi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Privada</strong></td>
+                        <td>Centralizada</td>
+                        <td>Solo usuarios invitados</td>
+                        <td>Cadenas de suministro internas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Consorcio</strong></td>
+                        <td>Federada</td>
+                        <td>Grupo preseleccionado</td>
+                        <td>Pagos interbancarios, logística</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <h3>⚠️ Caso de Estudio: El Fracaso de TradeLens (IBM/Maersk)</h3>
+                <p><strong>La Promesa (2018):</strong> Digitalizar las cadenas de suministro globales con blockchain</p>
+                <p><strong>La Realidad (2022):</strong> Cierre por falta de viabilidad comercial</p>
+                <p><strong>La Causa:</strong> Gobernanza centralizada. Maersk (el mayor competidor) controlaba la plataforma. Otros no quisieron ceder datos y control a su rival.</p>
+                <p><strong>La Lección:</strong> Una blockchain privada controlada por un hegemón NO es una plataforma neutral. Es solo un silo de datos glorificado.</p>
+            </div>
+
+            <div class="key-concept">
+                <h3>Lección Estratégica de TradeLens</h3>
+                <p>El valor de blockchain NO reside solo en la inmutabilidad, sino en la <strong>gobernanza neutral</strong>.</p>
+                <p>No usar blockchain para reforzar centralización. Usar blockchain para crear neutralidad.</p>
+            </div>
+
+            <h3>Casos de Uso Exitosos (Centrados en el Usuario)</h3>
+
+            <div class="highlight-box">
+                <h3>1. Salud: Registros Médicos Electrónicos (EHR)</h3>
+                <p><strong>Problema:</strong> Datos fragmentados en silos incompatibles, paciente sin control</p>
+                <p><strong>Solución Blockchain:</strong></p>
+                <ul>
+                    <li>Registro médico universal e interoperable</li>
+                    <li>Paciente controla la clave de acceso</li>
+                    <li>Permisos granulares y temporales</li>
+                    <li>Auditoría inmutable de accesos</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>2. Identidad Soberana (Self-Sovereign Identity - SSI)</h3>
+                <p><strong>Problema:</strong> Identidad digital controlada por gobiernos y corporaciones</p>
+                <p><strong>Solución Blockchain:</strong></p>
+                <ul>
+                    <li>Usuario tiene billetera digital con credenciales verificables</li>
+                    <li>Universidad emite diploma digital firmado criptográficamente</li>
+                    <li>Estudiante presenta "prueba" al empleador sin contactar a la universidad</li>
+                    <li>Usuario controla sus datos y solo revela lo necesario</li>
+                </ul>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Quiz: ¿Por qué fracasó TradeLens?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) Problemas técnicos de la blockchain</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">B) Gobernanza centralizada por un competidor dominante</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">C) Costes demasiado altos</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) Falta de tecnología adecuada</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: FUTURO -->
+        <section class="section" id="section-5">
+            <h2>Parte V: El Futuro de Blockchain</h2>
+
+            <h3>El Desafío Central: El Trilema de Blockchain</h3>
+            <div class="highlight-box">
+                <p>Una blockchain solo puede optimizar <strong>dos de tres</strong> propiedades:</p>
+                <ul>
+                    <li><strong>Descentralización</strong></li>
+                    <li><strong>Seguridad</strong></li>
+                    <li><strong>Escalabilidad</strong></li>
+                </ul>
+                <p>Bitcoin y Ethereum eligieron Descentralización + Seguridad, sacrificando Escalabilidad.</p>
+            </div>
+
+            <h3>Tendencia 1: Soluciones de Capa 2 (Layer 2s)</h3>
+            <div class="key-concept">
+                <p><strong>Estrategia:</strong> Mover la ejecución "fuera de la cadena" a L2 (rápida y barata), luego publicar resumen en L1 (segura y descentralizada)</p>
+                <p><strong>Tipos principales:</strong></p>
+                <ul>
+                    <li><strong>Optimistic Rollups:</strong> Asumen validez por defecto, período de desafío de 7 días (Arbitrum, Optimism)</li>
+                    <li><strong>ZK-Rollups:</strong> Pruebas matemáticas de validez instantáneas (más seguro, más rápido)</li>
+                </ul>
+            </div>
+
+            <h3>Tendencia 2: Interoperabilidad - "Internet de Blockchains"</h3>
+            <div class="highlight-box">
+                <p><strong>Problema:</strong> Cientos de blockchains aisladas que no se comunican</p>
+                <p><strong>Soluciones:</strong></p>
+                <ul>
+                    <li><strong>Polkadot:</strong> Cadena de retransmisión central conectando paracadenas</li>
+                    <li><strong>Cosmos:</strong> Protocolo IBC (como TCP/IP para blockchains)</li>
+                    <li><strong>LayerZero:</strong> Mensajería "omnichain" universal</li>
+                </ul>
+            </div>
+
+            <h3>Tendencia 3: DeFi y Tokenización de Activos Reales (RWA)</h3>
+            <div class="interactive-demo">
+                <h3>Finanzas Descentralizadas (DeFi)</h3>
+                <p>Servicios financieros (préstamos, intercambios, seguros) sin intermediarios, usando smart contracts.</p>
+                <p><strong>Tokenización RWA:</strong> Crear representación digital de activos del mundo real</p>
+                <ul>
+                    <li>🏢 <strong>Bienes Raíces:</strong> Fraccionar edificios, invertir con 1%, recibir alquileres</li>
+                    <li>💰 <strong>Bonos:</strong> Deuda corporativa o bonos del tesoro como tokens, liquidación instantánea</li>
+                    <li>🏆 <strong>Materias Primas:</strong> Oro, créditos de carbono, petróleo tokenizados</li>
+                </ul>
+                <p><strong>Mercado proyectado:</strong> $16 trillones para 2030</p>
+            </div>
+
+            <h3>Tendencia 4: Web3 y DAOs</h3>
+            <div class="key-concept">
+                <h3>La Evolución del Internet</h3>
+                <p><strong>Web1:</strong> Solo lectura (páginas estáticas)</p>
+                <p><strong>Web2:</strong> Lectura-escritura (redes sociales centralizadas)</p>
+                <p><strong>Web3:</strong> Lectura-escritura-PROPIEDAD (usuarios dueños de sus datos)</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>DAOs: Organizaciones Autónomas Descentralizadas</h3>
+                <p>Organizaciones que operan según reglas en smart contracts, sin CEO ni junta directiva.</p>
+                <p><strong>Decisiones:</strong> Votaciones de miembros con tokens de gobernanza</p>
+                <p><strong>Impacto:</strong> Experimento radical en gobernanza digital y coordinación de capital</p>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Quiz: ¿Qué resuelven las soluciones de Capa 2?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) El problema de consenso</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">B) El Trilema de Blockchain - escalabilidad</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">C) La seguridad de smart contracts</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) La regulación gubernamental</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: DESAFÍOS -->
+        <section class="section" id="section-6">
+            <h2>Parte VI: Desafíos y Riesgos</h2>
+
+            <h3>Riesgos de Seguridad</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Riesgo</th>
+                        <th>Descripción</th>
+                        <th>Impacto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Ataque del 51%</strong></td>
+                        <td>Controlar >50% del poder de cómputo (PoW) o stake (PoS)</td>
+                        <td>🔴 Crítico en redes pequeñas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vulnerabilidades de Smart Contracts</strong></td>
+                        <td>Bugs en el código que permiten robo de fondos</td>
+                        <td>🔴 Crítico - principal vector de ataque en DeFi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Riesgo de Puentes</strong></td>
+                        <td>Fallas en protocolos cross-chain</td>
+                        <td>🔴 Crítico - objetivo número uno de hackers</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="highlight-box">
+                <h3>El Desafío Regulatorio</h3>
+                <p><strong>Dilema de los Reguladores:</strong></p>
+                <ul>
+                    <li>Proteger inversores y prevenir fraude/lavado de dinero</li>
+                    <li>NO reprimir innovación tecnológica</li>
+                </ul>
+                <p><strong>Áreas de Escrutinio 2025:</strong></p>
+                <ul>
+                    <li>Regulación de stablecoins</li>
+                    <li>Cómo regular DeFi (sin entidad legal tradicional)</li>
+                    <li>Estatus legal de DAOs</li>
+                </ul>
+                <p><strong>Impacto:</strong> La incertidumbre regulatoria es el principal freno para adopción institucional masiva</p>
+            </div>
+
+            <div class="highlight-box">
+                <h3>El Desafío de Sostenibilidad</h3>
+                <p><strong>Problema PoW:</strong> Consumo energético comparable a países pequeños</p>
+                <p><strong>Crítica:</strong> Desperdicio de energía con impacto ambiental negativo</p>
+                <p><strong>Defensa:</strong></p>
+                <ul>
+                    <li>Es el coste de la seguridad, no "desperdicio"</li>
+                    <li>Minería incentivada a usar energía renovable barata</li>
+                </ul>
+                <p><strong>Solución:</strong> Transición a PoS (99% menos energía - caso Ethereum)</p>
+            </div>
+
+            <div class="key-concept">
+                <h3>Caso de Estudio: Hackeo de Balancer</h3>
+                <p>Protocolo DeFi con múltiples auditorías fue hackeado por vulnerabilidad lógica en smart contract.</p>
+                <p><strong>Lección:</strong> La blockchain puede ser segura, pero el código de aplicación encima puede tener bugs críticos.</p>
+                <p><strong>Impacto:</strong> Socava confianza en todo el ecosistema DeFi</p>
+            </div>
+
+            <div class="quiz-container">
+                <div class="quiz-question">Quiz Final: ¿Cuál es el mayor freno para la adopción institucional de blockchain?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) La tecnología no funciona</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">B) El consumo de energía</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">C) La incertidumbre regulatoria</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) Falta de desarrolladores</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer">
+            <h2>Conclusión</h2>
+            <p>Blockchain ha evolucionado desde una herramienta de sellado de tiempo hasta convertirse en la base de una <strong>economía digital autónoma y programable</strong>.</p>
+            <p>Su verdadero impacto es la <strong>desintermediación radical</strong>: automatizar la confianza y reducir intermediarios que cobran rentas.</p>
+            <p>El futuro es modular: L2s para escalabilidad, protocolos de interoperabilidad para conectividad, DeFi y RWA para integración económica.</p>
+
+            <div class="author-info">
+                <p>Clase creada por <strong>Alejandro Herrera López</strong></p>
+                <div class="author-links">
+                    <a href="https://www.linkedin.com/in/alejandro-herreracr/" target="_blank">🔗 LinkedIn</a>
+                    <a href="https://alejoherrera.com" target="_blank">🌐 alejoherrera.com</a>
+                    <a href="https://github.com/alejoherrera" target="_blank">💻 GitHub</a>
+                </div>
+                <p style="margin-top: 20px; opacity: 0.8; font-size: 0.9em;">
+                    © 2025 - Material educativo de código abierto
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        const totalSections = 7;
+
+        // Navegación entre secciones
+        function showSection(index) {
+            const sections = document.querySelectorAll('.section');
+            const buttons = document.querySelectorAll('.nav-btn');
+
+            sections.forEach(s => s.classList.remove('active'));
+            buttons.forEach(b => b.classList.remove('active'));
+
+            sections[index].classList.add('active');
+            buttons[index].classList.add('active');
+
+            currentSection = index;
+            document.getElementById('progress').textContent = `Sección ${index + 1} de ${totalSections}`;
+
+            // Redibujar canvas según la sección
+            setTimeout(() => {
+                if (index === 1) {
+                    resetImmutabilityDemo();
+                } else if (index === 2) {
+                    resetConsensusDemo();
+                }
+            }, 100);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mostrar detalles de bloques
+        function showBlockDetail(blockNum) {
+            const details = {
+                0: '<h3>🔷 Bloque Génesis</h3><p><strong>Bloque 0:</strong> El primer bloque de la cadena</p><p>No tiene hash previo (es el origen)</p><p>Contiene parámetros iniciales de la red</p>',
+                1: '<h3>🔷 Bloque 1</h3><p><strong>Hash Previo:</strong> 0x00... (Génesis)</p><p><strong>Transacciones:</strong> 3</p><p><strong>Hash:</strong> 0xA3...</p><p>Este bloque está criptográficamente enlazado al Génesis</p>',
+                2: '<h3>🔷 Bloque 2</h3><p><strong>Hash Previo:</strong> 0xA3... (Bloque 1)</p><p><strong>Transacciones:</strong> 5</p><p><strong>Hash:</strong> 0xF7...</p><p>Cada bloque contiene el hash del anterior</p>',
+                3: '<h3>🔷 Bloque 3</h3><p><strong>Hash Previo:</strong> 0xF7... (Bloque 2)</p><p><strong>Transacciones:</strong> 2</p><p><strong>Hash:</strong> 0x9B...</p><p>Esta cadena de dependencias crea inmutabilidad</p>'
+            };
+
+            const container = document.getElementById('blockDetail');
+            container.innerHTML = details[blockNum];
+            container.style.display = 'block';
+        }
+
+        // Demo de inmutabilidad
+        let immutabilityAnimationInterval = null;
+
+        function demonstrateImmutability() {
+            const canvas = document.getElementById('immutabilityCanvas');
+            if (!canvas) return;
+
+            const width = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+            canvas.width = width;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+
+            let step = 0;
+            const maxSteps = 10;
+
+            if (immutabilityAnimationInterval) {
+                clearInterval(immutabilityAnimationInterval);
+            }
+
+            immutabilityAnimationInterval = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Dibujar 4 bloques
+                const blockWidth = 120;
+                const blockHeight = 80;
+                const spacing = 40;
+                const startX = 50;
+                const y = 160;
+
+                for (let i = 0; i < 4; i++) {
+                    const x = startX + i * (blockWidth + spacing);
+
+                    // Color del bloque
+                    let color = '#4caf50'; // Verde (válido)
+                    if (step > 3 && i === 1) {
+                        color = '#f44336'; // Rojo (alterado)
+                    }
+                    if (step > 5 && i >= 2) {
+                        color = '#ff9800'; // Naranja (cadena rota)
+                    }
+
+                    // Dibujar bloque
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x, y, blockWidth, blockHeight);
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, y, blockWidth, blockHeight);
+
+                    // Texto del bloque
+                    ctx.fillStyle = 'white';
+                    ctx.font = 'bold 16px Arial';
+                    ctx.fillText(`Bloque ${i}`, x + 20, y + 30);
+                    ctx.font = '12px Arial';
+                    ctx.fillText(`Hash: 0x${i}A...`, x + 10, y + 55);
+
+                    // Flecha
+                    if (i < 3) {
+                        ctx.fillStyle = '#333';
+                        ctx.beginPath();
+                        ctx.moveTo(x + blockWidth, y + 40);
+                        ctx.lineTo(x + blockWidth + spacing - 10, y + 40);
+                        ctx.lineTo(x + blockWidth + spacing - 15, y + 35);
+                        ctx.moveTo(x + blockWidth + spacing - 10, y + 40);
+                        ctx.lineTo(x + blockWidth + spacing - 15, y + 45);
+                        ctx.stroke();
+                    }
+                }
+
+                // Mensajes
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 16px Arial';
+                if (step <= 3) {
+                    ctx.fillText('Cadena válida e inmutable ✓', 50, 100);
+                } else if (step <= 5) {
+                    ctx.fillText('⚠️ Intentando alterar Bloque 1...', 50, 100);
+                } else {
+                    ctx.fillText('❌ Cadena rota! Todos detectan la manipulación', 50, 100);
+                }
+
+                step++;
+                if (step > maxSteps) {
+                    clearInterval(immutabilityAnimationInterval);
+                    document.getElementById('immutabilityInfo').textContent =
+                        'La alteración rompió la cadena. Cualquier nodo puede detectarlo. Esto es inmutabilidad.';
+                }
+            }, 800);
+        }
+
+        function resetImmutabilityDemo() {
+            if (immutabilityAnimationInterval) {
+                clearInterval(immutabilityAnimationInterval);
+            }
+
+            const canvas = document.getElementById('immutabilityCanvas');
+            if (!canvas) return;
+
+            const width = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+            canvas.width = width;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Dibujar cadena inicial válida
+            const blockWidth = 120;
+            const blockHeight = 80;
+            const spacing = 40;
+            const startX = 50;
+            const y = 160;
+
+            for (let i = 0; i < 4; i++) {
+                const x = startX + i * (blockWidth + spacing);
+
+                ctx.fillStyle = '#4caf50';
+                ctx.fillRect(x, y, blockWidth, blockHeight);
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x, y, blockWidth, blockHeight);
+
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 16px Arial';
+                ctx.fillText(`Bloque ${i}`, x + 20, y + 30);
+                ctx.font = '12px Arial';
+                ctx.fillText(`Hash: 0x${i}A...`, x + 10, y + 55);
+
+                if (i < 3) {
+                    ctx.fillStyle = '#333';
+                    ctx.beginPath();
+                    ctx.moveTo(x + blockWidth, y + 40);
+                    ctx.lineTo(x + blockWidth + spacing - 10, y + 40);
+                    ctx.lineTo(x + blockWidth + spacing - 15, y + 35);
+                    ctx.moveTo(x + blockWidth + spacing - 10, y + 40);
+                    ctx.lineTo(x + blockWidth + spacing - 15, y + 45);
+                    ctx.stroke();
+                }
+            }
+
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('Cadena válida e inmutable ✓', 50, 100);
+
+            document.getElementById('immutabilityInfo').textContent =
+                'Haz clic en "Intentar Alterar Bloque" para ver qué sucede cuando se modifica un bloque antiguo.';
+        }
+
+        // Demo de consenso
+        function resetConsensusDemo() {
+            const canvas = document.getElementById('consensusCanvas');
+            if (!canvas) return;
+
+            const width = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+            canvas.width = width;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#333';
+            ctx.font = '18px Arial';
+            ctx.fillText('Selecciona PoW o PoS para ver una simulación', canvas.width/2 - 180, canvas.height/2);
+
+            document.getElementById('consensusInfo').textContent =
+                'Selecciona un mecanismo de consenso para ver cómo funciona.';
+        }
+
+        function simulatePoW() {
+            const canvas = document.getElementById('consensusCanvas');
+            if (!canvas) return;
+
+            const width = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+            canvas.width = width;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+
+            let step = 0;
+            const interval = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Título
+                ctx.fillStyle = '#f5576c';
+                ctx.font = 'bold 20px Arial';
+                ctx.fillText('⚡ Prueba de Trabajo (PoW)', 50, 40);
+
+                // Mineros compitiendo
+                const miners = 5;
+                const minerWidth = 80;
+                const spacing = 30;
+                const startX = 100;
+
+                for (let i = 0; i < miners; i++) {
+                    const x = startX + i * (minerWidth + spacing);
+                    const y = 100;
+
+                    // Dibujar minero
+                    const isWinner = (step > 5 && i === 2);
+                    ctx.fillStyle = isWinner ? '#4caf50' : '#666';
+                    ctx.fillRect(x, y, minerWidth, 80);
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, y, minerWidth, 80);
+
+                    ctx.fillStyle = 'white';
+                    ctx.font = '14px Arial';
+                    ctx.fillText(`Minero ${i+1}`, x + 10, y + 30);
+
+                    if (step <= 5) {
+                        ctx.fillText('⛏️ Minando...', x + 10, y + 55);
+                    } else if (isWinner) {
+                        ctx.fillText('✅ Ganador!', x + 10, y + 55);
+                    } else {
+                        ctx.fillText('❌ Perdió', x + 10, y + 55);
+                    }
+                }
+
+                // Información
+                ctx.fillStyle = '#333';
+                ctx.font = '16px Arial';
+                if (step <= 5) {
+                    ctx.fillText('Los mineros compiten resolviendo puzzles criptográficos...', 50, 250);
+                    ctx.fillText('El primero en resolver gana el derecho a agregar el bloque', 50, 280);
+                } else {
+                    ctx.fillText('¡Minero 3 resolvió primero! Gana recompensa + comisiones', 50, 250);
+                    ctx.fillText('Coste: Enorme energía computacional', 50, 280);
+                }
+
+                step++;
+                if (step > 8) {
+                    clearInterval(interval);
+                    document.getElementById('consensusInfo').textContent =
+                        'PoW: Seguridad a través de coste energético. Atacar es prohibitivamente caro.';
+                }
+            }, 600);
+        }
+
+        function simulatePoS() {
+            const canvas = document.getElementById('consensusCanvas');
+            if (!canvas) return;
+
+            const width = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+            canvas.width = width;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+
+            let step = 0;
+            const interval = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Título
+                ctx.fillStyle = '#4caf50';
+                ctx.font = 'bold 20px Arial';
+                ctx.fillText('💰 Prueba de Participación (PoS)', 50, 40);
+
+                // Validadores
+                const validators = 5;
+                const valWidth = 80;
+                const spacing = 30;
+                const startX = 100;
+
+                for (let i = 0; i < validators; i++) {
+                    const x = startX + i * (valWidth + spacing);
+                    const y = 100;
+
+                    // Dibujar validador
+                    const isSelected = (step > 3 && i === 3);
+                    ctx.fillStyle = isSelected ? '#4caf50' : '#666';
+                    ctx.fillRect(x, y, valWidth, 80);
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, y, valWidth, 80);
+
+                    ctx.fillStyle = 'white';
+                    ctx.font = '14px Arial';
+                    ctx.fillText(`Validador ${i+1}`, x + 5, y + 25);
+                    ctx.font = '12px Arial';
+                    ctx.fillText(`Stake: ${(i+1)*10}k`, x + 10, y + 45);
+
+                    if (step <= 3) {
+                        ctx.fillText('⏳ Esperando', x + 5, y + 65);
+                    } else if (isSelected) {
+                        ctx.fillText('✅ Elegido!', x + 10, y + 65);
+                    }
+                }
+
+                // Información
+                ctx.fillStyle = '#333';
+                ctx.font = '16px Arial';
+                if (step <= 3) {
+                    ctx.fillText('Validadores bloquean capital (stake) como garantía...', 50, 250);
+                    ctx.fillText('El protocolo selecciona uno aleatoriamente', 50, 280);
+                } else {
+                    ctx.fillText('¡Validador 4 fue elegido! Valida el bloque y gana comisiones', 50, 250);
+                    ctx.fillText('Si actúa mal → pierde su stake (slashing). Muy eficiente energéticamente', 50, 280);
+                }
+
+                step++;
+                if (step > 6) {
+                    clearInterval(interval);
+                    document.getElementById('consensusInfo').textContent =
+                        'PoS: Seguridad a través de capital en riesgo. 99% menos energía que PoW.';
+                }
+            }, 700);
+        }
+
+        // Sistema de quiz
+        function checkAnswer(element, isCorrect) {
+            const options = element.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+
+            if (isCorrect) {
+                element.classList.add('correct');
+                setTimeout(() => alert('¡Correcto! 🎉'), 100);
+            } else {
+                element.classList.add('incorrect');
+                setTimeout(() => alert('Incorrecto. Revisa el material e inténtalo de nuevo.'), 100);
+            }
+        }
+
+        // Inicialización
+        window.onload = function() {
+            resetImmutabilityDemo();
+        };
+
+        window.onresize = function() {
+            if (currentSection === 1) {
+                resetImmutabilityDemo();
+            } else if (currentSection === 2) {
+                resetConsensusDemo();
+            }
+        };
+    </script>
+</body>
+</html>
